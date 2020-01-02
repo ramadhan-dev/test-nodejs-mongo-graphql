@@ -1,5 +1,7 @@
 const Register = require('./../models/register');
-const { validationResult } = require('express-validator/check');
+const {
+  validationResult
+} = require('express-validator/check');
 exports.store = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -11,8 +13,8 @@ exports.store = (req, res) => {
 
   register.save((err, result) => {
     if (err) {
-      return res.status(400).json({
-        error: err
+      return res.status(409).json({
+        error: err.errmsg
       });
     }
     res.status(200).json({
