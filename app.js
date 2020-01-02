@@ -5,12 +5,11 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const dotenv = require('dotenv');
+const CORS = require('./src/utils/CORS');
+const handleError = require('./src/utils/handleError');
 const routes = require('./src/routes');
 
-// custom middleware bisa di sini atau di masing-masing router
-const myOwnMiddleware = (req, res, next) => {
-  next();
-};
+app.use(CORS);
 
 dotenv.config();
 
@@ -28,11 +27,14 @@ mongoose.connection.on('error', err => {
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(expressValidator());
-app.set('view engine', 'jade');
-app.get('/', function(req, res) {
-  res.render('sample');
-});
+
+// app.set('view engine', 'jade');
+// app.get('/', function(req, res) {
+//   res.render('sample');
+// });
+mongoose.Promise = global.Promise;
 app.use(routes);
+app.use(handleError);
 
 const port = process.env.PORT || 8080;
 

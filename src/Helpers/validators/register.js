@@ -12,10 +12,8 @@ exports.createUser = (req, res, next) => {
   if (errors) {
     const error = errors.map(error => {
       return { [error.param]: error.msg };
-    });
-    return res.status(400).json({
-      error: error
-    });
+    })[0];
+    return res.status(400).json(error);
   }
   next();
 };
