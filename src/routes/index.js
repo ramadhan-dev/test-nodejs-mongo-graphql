@@ -5,7 +5,7 @@ const blog = require('./blog');
 const register = require('./register');
 
 app.use('/post', post);
-app.use('/register', register);
+app.use('/auth', register);
 app.use('/blog', blog);
 
 module.exports = app;

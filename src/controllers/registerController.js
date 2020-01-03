@@ -1,27 +1,33 @@
 const Register = require('./../models/register');
-const {
-  validationResult
-} = require('express-validator/check');
+const bcrypt = require('bcryptjs');
 exports.store = (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      errors: errors.array()
-    });
-  }
-  const register = new Register(req.body);
-
-  register.save((err, result) => {
-    if (err) {
-      return res.status(409).json({
-        error: err.errmsg
+  bcrypt.genSalt(10)
+    .then(hash => {
+      req.body.password = hash;
+      const register = new Register(req.body);
+      saveData(register, res)
+    })
+    .catch(error => {
+      res.status(409).json({
+        error: error
       });
-    }
-    res.status(200).json({
-      message: result
-    });
-  });
+    })
 };
+
+// save data into database
+const saveData = (register, res) => {
+  register.save()
+    .then(result => {
+      res.status(200).json({
+        data: result,
+      });
+    })
+    .catch(error => {
+      res.status(409).json({
+        error: error.errmsg
+      });
+    });
+}
 
 exports.getUsername = async username => {
   const query = {
