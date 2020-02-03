@@ -1,25 +1,29 @@
-const Register = require('./../models/register');
-const bcrypt = require('bcryptjs');
+const Register = require("./../models/register");
+const bcrypt = require("bcryptjs");
 exports.store = (req, res) => {
-  bcrypt.genSalt(10)
+  bcrypt
+    .genSalt(10)
     .then(hash => {
-      req.body.password = hash;
-      const register = new Register(req.body);
-      saveData(register, res)
+      bcrypt.hash(req.body.password, hash, function (err, hashPassword) {
+        req.body.password = hashPassword;
+        const register = new Register(req.body);
+        saveData(register, res);
+      });
     })
     .catch(error => {
       res.status(409).json({
         error: error
       });
-    })
+    });
 };
 
 // save data into database
 const saveData = (register, res) => {
-  register.save()
+  register
+    .save()
     .then(result => {
       res.status(200).json({
-        data: result,
+        data: result
       });
     })
     .catch(error => {
@@ -27,7 +31,7 @@ const saveData = (register, res) => {
         error: error.errmsg
       });
     });
-}
+};
 
 exports.getUsername = async username => {
   const query = {

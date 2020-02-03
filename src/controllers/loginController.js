@@ -33,6 +33,10 @@ exports.login = (req, res, next) => {
               message: "Auth successful",
               data: token
             });
+          } else {
+            return res.status(200).json({
+              message: "Auth Failed",
+            });
           }
         })
         .catch(error => {
