@@ -28,7 +28,7 @@ exports.createUser = (req, res, next) => {
     );
 
   // password comfirmation
-  req.check("password_confirmation", "Passwordssssss").custom(value => {
+  req.check("password_confirmation", "Password ").custom(value => {
     if (value !== req.body.password) {
       return false;
     } else {
