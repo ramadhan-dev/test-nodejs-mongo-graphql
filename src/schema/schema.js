@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const _ = require('lodash');
+// const _ = require('lodash');
 const Book = require('./../models/book');
 const Author = require('./../models/author');
 const {
@@ -12,58 +12,9 @@ const {
   GraphQLNonNull
 } = graphql;
 
-// const { AuthorType } = require('./graphqlModels/author');
-// const { BookType } = require('./graphqlModels/books');
-
 const { AuthorType, BookType } = require('./Type/Book');
 
-const RootQuery = new GraphQLObjectType({
-  name: 'RootQueryType',
-  fields: {
-    book: {
-      type: BookType,
-      args: {
-        id: {
-          type: GraphQLID
-        }
-      },
-      resolve(parent, args) {
-        return Book.findById(args.id);
-      }
-    },
-    author: {
-      type: AuthorType,
-      args: {
-        id: {
-          type: GraphQLID
-        }
-      },
-      resolve(parent, args) {
-        return Author.findById(args.id);
-      }
-    },
-    booksByAuthorId: {
-      type: new GraphQLList(BookType),
-      args: {
-        authorId: {
-          type: GraphQLID
-        }
-      },
-      resolve(parent, args) {
-        const query = {
-          authorId: args.authorId
-        };
-        return Book.find(query);
-      }
-    },
-    authors: {
-      type: new GraphQLList(AuthorType),
-      resolve(parent, args) {
-        return [];
-      }
-    }
-  }
-});
+const { RootQuery } = require('./Query/Book');
 
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
